@@ -1,6 +1,7 @@
 // src/components/ChatPage.tsx
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
+import { nanoid } from 'nanoid'
 import ChatMessages from './component/messages';
 import ChatInput from './component/input';
 import Loader from '../../components/Loader';
@@ -16,7 +17,7 @@ const ChatPage: React.FC = () => {
     { text: 'Hello! How can I assist you today?', sender: 'ai' },
   ]);
   const [ userMessage, setUserMessage ] = useState<string>('');
-  const { message: aiResponse, loading: chatLoading, error } = useChat(userMessage);
+  const { message: aiResponse, loading: chatLoading, error } = useChat(userMessage, nanoid());
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
