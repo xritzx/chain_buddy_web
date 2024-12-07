@@ -16,10 +16,10 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
   };
 
   return (
-    <div className="flex items-center space-x-2 bg-base-100 px-2 py-2 rounded-lg">
+    <div className="flex items-center space-x-2 bg-base-300 px-2 py-2 rounded-lg">
       <input
         type="text"
-        className="flex-1 px-3 py-2 border border-neutral rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+        className="flex-1 px-3 py-2 border bg-base-300 border-neutral rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
         placeholder="Type your message..."
         value={message}
         onChange={(e) => setMessage(e.target.value)}

@@ -9,7 +9,7 @@ import {
 } from "@heroicons/react/24/solid";
 
 type NotificationProps = {
-  content: React.ReactNode;
+  content: React.ReactNode | string;
   status: "success" | "info" | "loading" | "error" | "warning";
   duration?: number;
   icon?: string;
@@ -78,7 +78,7 @@ export const notification = {
   warning: (content: React.ReactNode, options?: NotificationOptions) => {
     return Notification({ content, status: "warning", ...options });
   },
-  error: (content: React.ReactNode, options?: NotificationOptions) => {
+  error: (content: React.ReactNode | string, options?: NotificationOptions) => {
     return Notification({ content, status: "error", ...options });
   },
   loading: (content: React.ReactNode, options?: NotificationOptions) => {

@@ -17,10 +17,16 @@ const ChatPage: React.FC = () => {
     { text: 'Hello! How can I assist you today?', sender: 'ai' },
   ]);
   const [ userMessage, setUserMessage ] = useState<string>('');
-  const { message: aiResponse, loading: chatLoading, error } = useChat(userMessage, nanoid());
+  const [conversationId, setConversationId] = useState<string>('');
+  const { message: aiResponse, loading: chatLoading, error } = useChat(userMessage, conversationId);
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
+
+  useEffect(() => {
+    setConversationId(nanoid());
+  }, [])
+  
   useEffect(() => {
     // Scroll to the bottom whenever messages change
     if (bottomRef.current) {
@@ -48,9 +54,9 @@ const ChatPage: React.FC = () => {
     <div className="flex flex-col h-[760px] bg-base-200">
       {/* Main chat container with fixed height */}
       <div className="flex-1 flex justify-center py-4 px-2 sm:px-4 overflow-hidden">
-        <div className="relative w-full max-w-2xl flex flex-col bg-white shadow-md h-full">
+        <div className="relative w-full max-w-2xl flex flex-col bg-transparent shadow-md h-full">
           {/* Messages area: scrollable */}
-          <div className="flex-1 overflow-y-auto p-4 bg-gray-50 rounded-lg">
+          <div className="flex-1 bg-base-300 overflow-y-auto p-4 rounded-lg">
             <ChatMessages messages={messages} />
             {loading && (
               <div className="flex justify-center mt-4">
@@ -60,7 +66,7 @@ const ChatPage: React.FC = () => {
             <div ref={bottomRef} />
           </div>
           {/* Input area at the bottom */}
-          <div className="border-t border-gray-200 p-2 bg-white">
+          <div className="border-t border-gray-200 p-2 bg-base-300">
             <ChatInput onSend={handleSend} />
           </div>
         </div>
