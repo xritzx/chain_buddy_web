@@ -54,3 +54,23 @@ p {
 .btn.btn-ghost {
   @apply shadow-none;
 }
+
+
+.gradient-text {
+  font-size: 20px;
+  font-weight: bold;
+  background: linear-gradient(to right, rgb(251, 115, 115), rgb(103, 103, 255), rgb(255, 86, 255));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent; /* Fallback: if the browser does not support background-clip */
+}
+.gradient-text-2 {
+  font-size: 24px;
+  font-weight: bold;
+  background: none;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent; /* Fallback: if the browser does not support background-clip */
+}

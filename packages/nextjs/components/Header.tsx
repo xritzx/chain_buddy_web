@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { Bars3Icon, ChatBubbleLeftEllipsisIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
-import PasswordModal from "~~/components/PasswordModal";
+import NookUserModal from "~~/components/NookUserModal";
 import { useAccount } from "wagmi";
 
 type HeaderMenuLink = {
@@ -68,16 +68,14 @@ export const Header = () => {
   );
 
   useEffect(() => {
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken && address) {
-        setModalOpen(true); // Prompt for password if no authToken found
+    const username = localStorage.getItem('username');
+    if (!username && address) {
+        setModalOpen(true);
     }
   }, [address]);
 
-  const handlePasswordSubmit = (password: string) => {
-    // Encode and store the address:password in localStorage
-    const encoded = btoa(`${address}:${password}`);
-    localStorage.setItem('authToken', encoded);
+  const handleUsernameSubmit = (username: string) => {
+    localStorage.setItem('username', username);
     setModalOpen(false);
   };
 
@@ -89,7 +87,7 @@ export const Header = () => {
     <div className="fixed top-3 lg:static max-w-screen-xl navbar bg-base-100 rounded-xl justify-center z-10 shadow-md shadow-secondary mx-auto mt-5">
       <div className="navbar-center w-auto lg:w-1/2">
       {isModalOpen && (
-        <PasswordModal isOpen={isModalOpen} onClose={handleClose} onPasswordSubmit={handlePasswordSubmit} />
+        <NookUserModal isOpen={isModalOpen} onClose={handleClose} onUsernameSubmit={handleUsernameSubmit} />
       )}
         <div className="lg:hidden dropdown" ref={burgerMenuRef}>
           <label

@@ -127,7 +127,7 @@ export const AddressInfoDropdown = ({
               type="button"
               onClick={() => {
                 disconnect()
-                localStorage.removeItem('authToken')
+                localStorage.removeItem('username')
               }}
             >
               <ArrowLeftOnRectangleIcon className="h-6 w-4 ml-2 sm:ml-0" /> <span>Disconnect</span>

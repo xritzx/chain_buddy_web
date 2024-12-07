@@ -1,33 +1,33 @@
-// PasswordModal.tsx
+// NookUserModal.tsx
 import React, { useState } from 'react';
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  onPasswordSubmit: (password: string) => void;
+  onUsernameSubmit: (userName: string) => void;
 }
 
-export const PasswordModal: React.FC<Props> = ({ isOpen, onClose, onPasswordSubmit }) => {
-    const [password, setPassword] = useState<string>('');
+export const NookUserModal: React.FC<Props> = ({ isOpen, onClose, onUsernameSubmit }) => {
+    const [userName, setUserName] = useState<string>('');
 
     if (!isOpen) return null;
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        onPasswordSubmit(password);
+        onUsernameSubmit(userName);
     };
 
     return (
         <div className="fixed inset-0 bg-base-200 bg-opacity-50 flex justify-center items-center">
             <div className="bg-base-100 p-4 rounded-lg shadow-lg">
-                <h2 className="text-lg font-bold">Enter Your Password</h2>
+                <h2 className="text-lg font-bold">Enter Your Nook Or Farcaster Id</h2>
                 <form onSubmit={handleSubmit}>
                     <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        type="userName"
+                        value={userName}
+                        onChange={(e) => setUserName(e.target.value)}
                         className="mt-2 p-2 border rounded w-full"
-                        placeholder="Password"
+                        placeholder="Username"
                         required
                     />
                     <button type="submit" className="bg-secondary hover:bg-primary text-white font-bold py-2 px-4 rounded mt-4">
@@ -42,4 +42,4 @@ export const PasswordModal: React.FC<Props> = ({ isOpen, onClose, onPasswordSubm
     );
 };
 
-export default PasswordModal;
+export default NookUserModal;
