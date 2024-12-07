@@ -32,10 +32,13 @@ const EmojiRating = ({ rating }: Rating) => {
             break;
         case 8:
             ratedEmojis = '🤚✌🏼👍';
+            break;
         case 9:
             ratedEmojis = '🤚✌🏻✌🏻';
+            break;
         case 10:
             ratedEmojis = '🙌🏼';
+            break;
         default:
             ratedEmojis = '';
     } 
