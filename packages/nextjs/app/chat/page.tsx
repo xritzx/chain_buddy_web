@@ -52,10 +52,10 @@ const ChatPage: React.FC = () => {
   const processorRef = useRef<ScriptProcessorNode | null>(null);
   const silenceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
-  const [isVoiceMode, setIsVoiceMode] = useState(false)
+  const [isInAudioMode, setisInAudioMode] = useState(false)
   const [speaker, setSpeaker] = useState<Speaker>('user')
   const [speakerState, setSpeakerState] = useState<SpeakerState>(0)
-  const [isRecording, setIsRecording] = useState(false)
+  const [isListening, setisListening] = useState(false)
   const [audioData, setAudioData] = useState<Int16Array[]>([]);
 
 
@@ -91,19 +91,19 @@ const ChatPage: React.FC = () => {
     audioPlayerRef.current.addEventListener('ended', () => {
       setSpeaker('user');
       setSpeakerState(0);
-      setIsVoiceMode(false);
+      setisInAudioMode(false);
     });
     return () => {
       stopRecording();
       if (audioPlayerRef.current) {
         audioPlayerRef.current.removeEventListener('ended', () => {
           setSpeaker('user');
-          setIsVoiceMode(false);
+          setisInAudioMode(false);
           setSpeakerState(0);
         });
         audioPlayerRef.current.pause();
         audioPlayerRef.current = null;
-        setIsVoiceMode(false);
+        setisInAudioMode(false);
       }
     };
   }, []);
@@ -135,8 +135,8 @@ const ChatPage: React.FC = () => {
         setAudioData(prev => [...prev, pcmData]);
       };
 
-      setIsRecording(true);
-      notification.info("Recording started");
+      setisListening(true);
+      notification.success("Recording started");
     } catch (err) {
       console.log('Error initializing audio:', err);
       notification.error("Failed to access microphone");
@@ -144,7 +144,7 @@ const ChatPage: React.FC = () => {
   };
 
   const handleToggleRecording = async () => {
-    if (!isRecording) {
+    if (!isListening) {
       try {
         await initializeAudioProcessing();
       } catch (err) {
@@ -156,11 +156,11 @@ const ChatPage: React.FC = () => {
     }
   }
   const stopRecording = async () => {
+    const thinkingId = notification.loading("Thinking ....");
     if (silenceTimeoutRef.current) {
       clearTimeout(silenceTimeoutRef.current);
       silenceTimeoutRef.current = null;
     }
-
     if (processorRef.current) {
       processorRef.current.disconnect();
       processorRef.current = null;
@@ -176,8 +176,9 @@ const ChatPage: React.FC = () => {
       streamRef.current = null;
     }
 
-    setIsRecording(false);
+    setisListening(false);
     await sendRecordedAudio();
+    notification.remove(thinkingId);
   };
 
   const sendRecordedAudio = async () => {
@@ -229,9 +230,11 @@ const ChatPage: React.FC = () => {
       lines.forEach(async line => {
         if (line.trim()) {
           try {
-            const jsonResponse = JSON.parse(line);
-            if (jsonResponse.event === 'agent') {
-              await generateSpeech(jsonResponse.data);
+            const eventData = JSON.parse(line);
+            if (eventData.event === 'agent') {
+              await generateSpeech(eventData.data);
+            } else if (eventData.event === 'transcribed') {
+              setMessages((prev) => [...prev, { text: eventData.data, sender: 'user' }]);
             }
           } catch (err) {
             console.log('Error parsing JSON:', err);
@@ -260,6 +263,7 @@ const ChatPage: React.FC = () => {
 
       if (audioPlayerRef.current) {
         setSpeakerState(1);
+        setMessages((prev) => [...prev, { text, sender: 'ai' }]);
         audioPlayerRef.current.src = audioUrl;
         await audioPlayerRef.current.play();
 
@@ -290,11 +294,11 @@ const ChatPage: React.FC = () => {
           <div className="border-t border-gray-200 p-2 bg-base-300">
             <div className="flex items-center space-x-2 bg-base-300 px-2 py-2 rounded-lg">
             {/* Voice Start Button */}
-            {!isVoiceMode && (
+            {!isInAudioMode && (
               <button
                 onClick={async () => {
                   await handleToggleRecording();
-                  setIsVoiceMode(true);
+                  setisInAudioMode(true);
                   setSpeakerState(1);
                 }}
                 className="h-12 w-12 p-2 m-0 rounded-full border-4 border-secondary bg-base-100 hover:bg-base-200 focus:outline-none focus:ring-2 focus:primary focus:ring-opacity-50"
@@ -304,7 +308,7 @@ const ChatPage: React.FC = () => {
             )}
 
             {/* Voice Stop Button */}
-            {isVoiceMode && isRecording && (
+            {isInAudioMode && isListening && (
               <button
                 onClick={() => {
                   handleToggleRecording();
@@ -316,12 +320,12 @@ const ChatPage: React.FC = () => {
             )}
 
             {/* System Processing/Speaking Mode */}
-            {isVoiceMode && !isRecording && (
+            {isInAudioMode && !isListening && (
               <div
                 className="h-12 w-12 p-2 m-0 flex items-center justify-center rounded-full border-4 border-secondary bg-primary animate-spin"
                 onClick={() => {
                   audioPlayerRef.current?.pause();
-                  setIsVoiceMode(false);
+                  setisInAudioMode(false);
                 }}
               >
                 <ArrowPathIcon className='text-white text-3xl' />
