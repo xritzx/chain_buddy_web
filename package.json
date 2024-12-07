@@ -29,6 +29,7 @@
     "node": ">=18.18.0"
   },
   "dependencies": {
+    "@coinbase/onchainkit": "^0.35.8",
     "axios": "^1.7.9",
     "nanoid": "^5.0.9"
   }

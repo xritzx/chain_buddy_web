@@ -125,7 +125,10 @@ export const AddressInfoDropdown = ({
             <button
               className="menu-item text-error btn-sm !rounded-xl flex gap-3 py-3"
               type="button"
-              onClick={() => disconnect()}
+              onClick={() => {
+                disconnect()
+                localStorage.removeItem('authToken')
+              }}
             >
               <ArrowLeftOnRectangleIcon className="h-6 w-4 ml-2 sm:ml-0" /> <span>Disconnect</span>
             </button>

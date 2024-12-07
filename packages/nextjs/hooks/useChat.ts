@@ -58,9 +58,10 @@ export const useChat = (userMessage: string, conversationId: string): ChatComple
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `${localStorage.getItem('authToken')}`
           },
           body: JSON.stringify({
-            input: userMessage, conversation_id: conversationId, userAddress: address ?? ZERO_ADDRESS
+            input: userMessage, conversation_id: conversationId, user_address: address ?? ZERO_ADDRESS
           })
         }
       );
