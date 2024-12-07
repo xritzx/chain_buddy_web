@@ -44,7 +44,7 @@ const EmojiRating = ({ rating }: Rating) => {
     } 
     return (
         <div>
-            <span className='gradient-text'>NookFlixAI Rating <span className='gradient-text-2'>{ratedEmojis}</span></span>
+            <span className='gradient-text'>CatFlix Rating <span className='gradient-text-2'>{ratedEmojis}</span></span>
         </div>
     );
 };

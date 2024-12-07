@@ -213,6 +213,7 @@ const ChatPage: React.FC = () => {
       await handleStreamResponse(reader);
     } catch (err) {
       console.log('Error sending audio:', err);
+      setisInAudioMode(false);
       notification.error("Failed to send audio data");
     }
   };
@@ -270,18 +271,19 @@ const ChatPage: React.FC = () => {
       }
     } catch (err) {
       console.log('Error generating speech:', err);
+      setisInAudioMode(false);
       notification.error("Failed to generate speech");
     }
   };
 
 
   return (
-    <div className="flex flex-col h-[760px] bg-base-200">
+    <div className="flex flex-col h-[760px] bg-transparent">
       {/* Main chat container with fixed height */}
       <div className="flex-1 flex justify-center py-4 px-2 sm:px-4 overflow-hidden">
         <div className="relative w-full max-w-2xl flex flex-col bg-transparent shadow-md h-full">
           {/* Messages area: scrollable */}
-          <div className="flex-1 bg-base-300 overflow-y-auto p-4 rounded-lg">
+          <div className="flex-1 bg-base-300 opacity-80 overflow-y-auto p-4 rounded-lg">
             <ChatMessages messages={messages} />
             {loading && (
               <div className="flex justify-center mt-4">
@@ -291,7 +293,7 @@ const ChatPage: React.FC = () => {
             <div ref={bottomRef} />
           </div>
           {/* Input area at the bottom */}
-          <div className="border-t border-gray-200 p-2 bg-base-300">
+          <div className="border-t border-gray-200 p-2 bg-base-300 opacity-60">
             <div className="flex items-center space-x-2 bg-base-300 px-2 py-2 rounded-lg">
             {/* Voice Start Button */}
             {!isInAudioMode && (
@@ -301,7 +303,7 @@ const ChatPage: React.FC = () => {
                   setisInAudioMode(true);
                   setSpeakerState(1);
                 }}
-                className="h-12 w-12 p-2 m-0 rounded-full border-4 border-secondary bg-base-100 hover:bg-base-200 focus:outline-none focus:ring-2 focus:primary focus:ring-opacity-50"
+                className="h-12 w-12 p-2 m-0 rounded-full border-4 border-secondary bg-primary hover:bg-accent focus:outline-none focus:ring-2 focus:primary focus:ring-opacity-50"
               >
                 <MicrophoneIcon className='text-white text-3xl' />
               </button>
@@ -313,7 +315,7 @@ const ChatPage: React.FC = () => {
                 onClick={() => {
                   handleToggleRecording();
                 }}
-                className="h-12 w-12 p-2 m-0 rounded-full border-4 border-secondary bg-base-200 hover:bg-base-300 animate-pulse focus:outline-none focus:ring-2 focus:secondary focus:ring-opacity-50"
+                className="h-12 w-12 p-2 m-0 rounded-full border-4 border-secondary bg-primary hover:bg-accent animate-pulse focus:outline-none focus:ring-2 focus:secondary focus:ring-opacity-50"
               >
                 <StopIcon className='text-white text-3xl' />
               </button>
