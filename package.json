@@ -32,6 +32,7 @@
     "@coinbase/onchainkit": "^0.35.8",
     "axios": "^1.7.9",
     "nanoid": "^5.0.9",
+    "openai": "^4.76.0",
     "react-markdown": "^9.0.1",
     "remark-gfm": "^4.0.0"
   }

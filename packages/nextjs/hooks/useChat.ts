@@ -1,6 +1,4 @@
-import axios from 'axios';
 import { useEffect, useState } from "react";
-import toast from 'react-hot-toast';
 import { useAccount } from 'wagmi';
 import { urls } from '~~/config/api';
 import { notification } from '~~/utils/scaffold-eth';

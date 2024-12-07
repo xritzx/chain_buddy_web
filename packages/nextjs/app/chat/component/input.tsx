@@ -15,8 +15,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
     }
   };
 
-  return (
-    <div className="flex items-center space-x-2 bg-base-300 px-2 py-2 rounded-lg">
+  return (<>
       <input
         type="text"
         className="flex-1 px-3 py-2 border bg-base-300 border-neutral rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
@@ -35,8 +34,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
         className="px-4 py-2 bg-primary text-primary-content rounded-md hover:bg-primary/90"
       >
         Send
-      </button>
-    </div>
+      </button></>
   );
 };
 
