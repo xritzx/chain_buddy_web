@@ -6,10 +6,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'MinecraftRegular';
+  src: url('/fonts/MinecraftRegular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal
+}
+
 @layer base {
   html {
     @apply font-pixel;
-    @apply text-sm; /* Sets the base font size to small for the entire document */
+    @apply text-lg; /* Sets the base font size to small for the entire document */
   }
 }
 @layer base {
