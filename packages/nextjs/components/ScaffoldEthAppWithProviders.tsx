@@ -1,5 +1,6 @@
 "use client";
 
+import "@farcaster/auth-kit/styles.css";
 import { useEffect, useState } from "react";
 import { RainbowKitProvider, darkTheme, lightTheme } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -10,12 +11,19 @@ import { WagmiProvider } from "wagmi";
 import { Footer } from "~~/components/Footer";
 import { Header } from "~~/components/Header";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
-import { useInitializeNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
+import { AuthKitProvider } from "@farcaster/auth-kit";
+import { providers } from 'ethers';
+
+const config = {
+  relay: "https://relay.farcaster.xyz",
+  rpcUrl: "https://mainnet.optimism.io",
+  domain: "catflix.ai",
+  siweUri: "http://localhost:3000",
+  provider: new providers.JsonRpcProvider(undefined, 10)
+};
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
-  useInitializeNativeCurrencyPrice();
-
   return (
     <>
       <div className="flex flex-col min-h-screen bg-hero-pattern h-screen bg-cover">
@@ -46,6 +54,7 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
   }, []);
 
   return (
+  <AuthKitProvider config={config}>
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
         <ProgressBar height="3px" color="#2299dd" />
@@ -53,9 +62,12 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
           avatar={BlockieAvatar}
           theme={mounted ? (isDarkMode ? darkTheme() : lightTheme()) : lightTheme()}
         >
-          <ScaffoldEthApp>{children}</ScaffoldEthApp>
+          <ScaffoldEthApp>
+            {children}
+          </ScaffoldEthApp>
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
+  </AuthKitProvider>  
   );
 };

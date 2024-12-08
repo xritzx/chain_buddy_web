@@ -1,14 +1,20 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { signIn, signOut, getCsrfToken } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Bars3Icon, ChatBubbleLeftEllipsisIcon } from "@heroicons/react/24/outline";
-import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
+import { RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 import NookUserModal from "~~/components/NookUserModal";
 import { useAccount } from "wagmi";
+import {
+  SignInButton,
+  StatusAPIResponse,
+  useProfile,
+} from "@farcaster/auth-kit";
 
 type HeaderMenuLink = {
   label: string;
@@ -58,28 +64,31 @@ export const HeaderMenuLinks = () => {
  * Site header
  */
 export const Header = () => {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   const [username, setUsername] = useState<string | null>(null);
-  const { address } = useAccount();
+  const [userInfo, setUserInfo] = useState<any | null>(null);
+
+  const { profile } = useProfile();
   const burgerMenuRef = useRef<HTMLDivElement>(null);
-  useOutsideClick(
-    burgerMenuRef,
-    useCallback(() => setIsDrawerOpen(false), []),
-  );
-  useEffect(() => {
-    const username = localStorage.getItem('username');
-    if (username) {
-      setUsername(username);
-    }
-  }, []);
 
   useEffect(() => {
-    const username = localStorage.getItem('username');
-    if (!username && address) {
-        setModalOpen(true);
+    if (localStorage.getItem('username')) {
+      setUsername(localStorage.getItem('username'));
+      const uinfo = localStorage.getItem('userInfo');
+      if(uinfo) {
+        setUserInfo(JSON.parse(uinfo));
+      }
     }
-  }, [address]);
+  }, []);
+  
+  useEffect(() => {
+    if (username) {
+      localStorage.setItem('username', username);
+    }
+    if (userInfo) {
+      localStorage.setItem('userInfo', JSON.stringify(userInfo));
+    }
+  }, [username]);
 
   const handleUsernameSubmit = (username: string) => {
     localStorage.setItem('username', username);
@@ -99,24 +108,11 @@ export const Header = () => {
         <div className="lg:hidden dropdown" ref={burgerMenuRef}>
           <label
             tabIndex={0}
-            className={`ml-1 btn btn-ghost ${isDrawerOpen ? "hover:bg-secondary" : "hover:bg-transparent"}`}
-            onClick={() => {
-              setIsDrawerOpen(prevIsOpenState => !prevIsOpenState);
-            }}
+            className={`ml-1 btn btn-ghost "hover:bg-transparent"}`} 
           >
             <Bars3Icon className="h-1/2" />
           </label>
-          {isDrawerOpen && (
-            <ul
-              tabIndex={0}
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
-              onClick={() => {
-                setIsDrawerOpen(false);
-              }}
-            >
-              <HeaderMenuLinks />
-            </ul>
-          )}
+          
         </div>
         <Link href="/" passHref className="hidden lg:flex items-center gap-2 ml-4 mr-6 shrink-0">
           <div className="flex relative w-10 h-10">
@@ -132,7 +128,16 @@ export const Header = () => {
         </ul>
       </div>
       <div className="navbar-end flex-grow mr-4">
-        <p>{username}&nbsp;</p>
+        <div className="flex items-center space-x-2">
+          <div className="w-10 h-10 relative">
+            <img className="rounded-full border border-gray-200 shadow-sm object-cover w-full h-ful" src={profile.pfpUrl ?? userInfo?.image} alt={profile?.displayName ?? userInfo?.name} />
+          </div>
+          <span className="text-sm font-medium text-gray-400">{profile?.displayName ?? userInfo?.name}</span>
+        </div>
+        { !username && <SignInButton onSuccess={(res) => {
+          setUsername(res.username??'')
+          setUserInfo({ name: res.displayName, image: res.pfpUrl})
+        }} />}&nbsp;
         <RainbowKitCustomConnectButton />
       </div>
     </div>
