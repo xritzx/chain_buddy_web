@@ -253,7 +253,7 @@ const ChatPage: React.FC = () => {
     try {
       const response = await openai.audio.speech.create({
         model: "tts-1",
-        voice: "echo",
+        voice: "onyx",
         input: text,
         speed: 1.2,
       });

@@ -30,8 +30,11 @@
   },
   "dependencies": {
     "@coinbase/onchainkit": "^0.35.8",
+    "@farcaster/auth-kit": "^0.6.0",
     "axios": "^1.7.9",
+    "ethers": "5.7.2",
     "nanoid": "^5.0.9",
+    "next-auth": "^4.24.11",
     "openai": "^4.76.0",
     "react-markdown": "^9.0.1",
     "remark-gfm": "^4.0.0"
