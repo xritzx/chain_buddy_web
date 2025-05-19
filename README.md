@@ -26,7 +26,7 @@ Before you begin, you need to install the following tools:
 
 ## Quickstart
 
-To get started with Scaffold-ETH 2, follow the steps below:
+To get started with Scaffold-ETH 2, please follow the steps below:
 
 1. Install dependencies if it was skipped in CLI:
 
